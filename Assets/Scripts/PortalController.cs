@@ -6,6 +6,7 @@ public class PortalController : MonoBehaviour
     public Material[] materials;
     private Camera mainCamera;
     public Material skyboxMaterial;
+    public float doorWidthForCollisionCheck = 1f;
 
     private bool wasInFront;
     private bool changeWorld;
@@ -27,7 +28,10 @@ public class PortalController : MonoBehaviour
     {
         Vector3 pos = mainCamera.transform.position;
         pos += mainCamera.transform.forward * mainCamera.nearClipPlane;
-        return (transform.InverseTransformPoint(pos).z > 0) ? true : false;
+        bool isInFront = false;
+        isInFront = (transform.InverseTransformPoint(pos).z > 0) ? true : false;
+        isInFront = isInFront && (Mathf.Abs(transform.InverseTransformPoint(pos).x) < doorWidthForCollisionCheck) ? true : false;
+        return isInFront;
     }
 
     private void OnTriggerEnter(Collider other)
